@@ -3,7 +3,7 @@ import { TitleLayout } from "../TitleLayout";
 import { Card, List, Typography, Checkbox } from "antd";
 import { productList } from "../data";
 
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 export const ProductList = () => {
   const [checkedItems, setCheckedItems] = useState([]);
@@ -39,7 +39,9 @@ export const ProductList = () => {
           <List.Item>
             <Card
               title={
-                <span
+                <Title
+                  level={4}
+                  type={checkedItems.includes(product.id) && "success"}
                   style={
                     checkedItems.includes(product.id)
                       ? { textDecoration: "line-through" }
@@ -47,11 +49,13 @@ export const ProductList = () => {
                   }
                 >
                   {product.description}
-                </span>
+                </Title>
               }
             >
               <div>
                 <Text
+                  strong
+                  type={checkedItems.includes(product.id) && "success"}
                   style={
                     checkedItems.includes(product.id)
                       ? { textDecoration: "line-through" }
@@ -63,6 +67,8 @@ export const ProductList = () => {
               </div>
               <div>
                 <Text
+                  strong
+                  type={checkedItems.includes(product.id) && "success"}
                   style={
                     checkedItems.includes(product.id)
                       ? { textDecoration: "line-through" }
