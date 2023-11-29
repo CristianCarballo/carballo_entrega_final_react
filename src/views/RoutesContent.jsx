@@ -1,16 +1,17 @@
 import { Route, Routes } from "react-router-dom";
-import { App } from "./App";
+import { ProductList } from "./Product/ProductList/ProductList";
 import { ProductForm } from "./Product/ProductForm/ProductForm";
 import { ProductDetail } from "./Product/ProductDetail/ProductDetail";
-import { ProductList } from "./Product/ProductList/ProductList";
+import { PageNotFound } from "./Product/PageNotFound";
 
 export const RoutesContent = () => {
   return (
     <Routes>
-      <Route path="/*" component={<App />} />
-      <Route path="/form" component={<ProductForm />} />
-      <Route path="/detail" component={<ProductDetail />} />
-      <Route path="/list" component={<ProductList />} />
+      <Route path="/*" element={<PageNotFound />} />
+      <Route path="/" element={<ProductList />} />
+      <Route path="/list" element={<ProductList />} />
+      <Route path="/form" element={<ProductForm />} />
+      <Route path="/detail" element={<ProductDetail />} />
     </Routes>
   );
 };
