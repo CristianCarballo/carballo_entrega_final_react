@@ -2,11 +2,13 @@ import { useState } from "react";
 import { TitleLayout } from "../TitleLayout";
 import { Card, List, Typography, Checkbox } from "antd";
 import { productList } from "../data";
+import { ModalDelete } from "../ModalDelete";
 
 const { Text, Title } = Typography;
 
 export const ProductList = () => {
   const [checkedItems, setCheckedItems] = useState([]);
+  const [products, setProducts] = useState(productList);
 
   const CheckBoxOnChange = (productId) => {
     const updatedItems = [...checkedItems];
@@ -34,22 +36,35 @@ export const ProductList = () => {
           xl: 6,
           xxl: 3,
         }}
-        dataSource={productList}
+        dataSource={products}
         renderItem={(product) => (
           <List.Item>
             <Card
               title={
-                <Title
-                  level={4}
-                  type={checkedItems.includes(product.id) && "success"}
-                  style={
-                    checkedItems.includes(product.id)
-                      ? { textDecoration: "line-through" }
-                      : {}
-                  }
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
                 >
-                  {product.description}
-                </Title>
+                  <Title
+                    level={4}
+                    type={checkedItems.includes(product.id) && "success"}
+                    style={
+                      checkedItems.includes(product.id)
+                        ? { textDecoration: "line-through" }
+                        : {}
+                    }
+                  >
+                    {product.description}
+                  </Title>
+                  <ModalDelete
+                    productId={product.id}
+                    products={products}
+                    setProducts={setProducts}
+                  />
+                </div>
               }
             >
               <div>
