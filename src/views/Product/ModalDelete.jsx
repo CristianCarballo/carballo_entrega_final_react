@@ -1,12 +1,12 @@
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { Button, Flex, Modal, Space } from "antd";
 
-export const ModalDelete = ({ productId, products, setProducts }) => {
+export const ModalDelete = ({ productId, products, updateProducts }) => {
   const [modal, contextHolder] = Modal.useModal();
 
   const handleDelete = () => {
     const newProducts = products.filter((product) => product.id !== productId);
-    setProducts(newProducts);
+    updateProducts(newProducts);
   };
 
   const handleClickConfirm = () => {

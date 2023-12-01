@@ -13,6 +13,11 @@ import { Link } from "react-router-dom";
 const { Header, Sider, Content } = Layout;
 
 export const App = () => {
+  const getStoredProducts = () => {
+    const storedProducts = localStorage.getItem("products");
+    return storedProducts ? JSON.parse(storedProducts) : [];
+  };
+
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer },
@@ -57,7 +62,7 @@ export const App = () => {
             background: colorBgContainer,
           }}
         >
-          <RoutesContent />
+          <RoutesContent getStoredProducts={getStoredProducts} />
         </Content>
       </Layout>
     </Layout>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TitleLayout } from "../TitleLayout";
 import { Card, List, Typography, Checkbox } from "antd";
 import { productList } from "../data";
@@ -6,9 +6,14 @@ import { ModalDelete } from "../ModalDelete";
 
 const { Text, Title } = Typography;
 
-export const ProductList = () => {
+export const ProductList = ({ getStoredProducts }) => {
   const [checkedItems, setCheckedItems] = useState([]);
   const [products, setProducts] = useState(productList);
+
+  const updateProducts = (newProducts) => {
+    setProducts(newProducts);
+    localStorage.setItem("products", JSON.stringify(newProducts));
+  };
 
   const CheckBoxOnChange = (productId) => {
     const updatedItems = [...checkedItems];
@@ -23,6 +28,14 @@ export const ProductList = () => {
     setCheckedItems(updatedItems);
   };
 
+  useEffect(() => {
+    const storedProducts = getStoredProducts();
+    if (storedProducts && storedProducts.length > 0) {
+      setProducts(storedProducts);
+      updateProducts(storedProducts);
+    }
+  }, []);
+
   return (
     <>
       <TitleLayout title={"Lista de Productos"} />
@@ -30,11 +43,11 @@ export const ProductList = () => {
         grid={{
           gutter: 16,
           xs: 1,
-          sm: 2,
-          md: 4,
-          lg: 4,
-          xl: 6,
-          xxl: 3,
+          sm: 1,
+          md: 1,
+          lg: 2,
+          xl: 3,
+          xxl: 4,
         }}
         dataSource={products}
         renderItem={(product) => (
@@ -62,7 +75,7 @@ export const ProductList = () => {
                   <ModalDelete
                     productId={product.id}
                     products={products}
-                    setProducts={setProducts}
+                    updateProducts={updateProducts}
                   />
                 </div>
               }
