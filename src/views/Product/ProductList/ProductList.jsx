@@ -1,40 +1,20 @@
-import { useState, useEffect } from "react";
-import { TitleLayout } from "../TitleLayout";
-import { Card, List, Typography, Checkbox } from "antd";
-import { productList } from "../data";
-import { ModalDelete } from "../ModalDelete";
+import { useState } from "react";
+import { TitleLayout } from "../shared/TitleLayout";
+import { List } from "antd";
+import { ProductCard } from "../ProductCard/ProductCard";
 
-const { Text, Title } = Typography;
-
-export const ProductList = ({ getStoredProducts }) => {
+export const ProductList = ({ updateProducts, products }) => {
   const [checkedItems, setCheckedItems] = useState([]);
-  const [products, setProducts] = useState(productList);
 
-  const updateProducts = (newProducts) => {
-    setProducts(newProducts);
-    localStorage.setItem("products", JSON.stringify(newProducts));
-  };
-
-  const CheckBoxOnChange = (productId) => {
+  const checkBoxOnChange = (productId) => {
     const updatedItems = [...checkedItems];
     const index = updatedItems.indexOf(productId);
 
-    if (index === -1) {
-      updatedItems.push(productId);
-    } else {
-      updatedItems.splice(index, 1);
-    }
+    if (index === -1) updatedItems.push(productId);
+    else updatedItems.splice(index, 1);
 
     setCheckedItems(updatedItems);
   };
-
-  useEffect(() => {
-    const storedProducts = getStoredProducts();
-    if (storedProducts && storedProducts.length > 0) {
-      setProducts(storedProducts);
-      updateProducts(storedProducts);
-    }
-  }, []);
 
   return (
     <>
@@ -52,73 +32,13 @@ export const ProductList = ({ getStoredProducts }) => {
         dataSource={products}
         renderItem={(product) => (
           <List.Item>
-            <Card
-              title={
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Title
-                    level={4}
-                    type={checkedItems.includes(product.id) && "success"}
-                    style={
-                      checkedItems.includes(product.id)
-                        ? { textDecoration: "line-through" }
-                        : {}
-                    }
-                  >
-                    {product.description}
-                  </Title>
-                  <ModalDelete
-                    productId={product.id}
-                    products={products}
-                    updateProducts={updateProducts}
-                  />
-                </div>
-              }
-            >
-              <div>
-                <Text
-                  strong
-                  type={checkedItems.includes(product.id) && "success"}
-                  style={
-                    checkedItems.includes(product.id)
-                      ? { textDecoration: "line-through" }
-                      : {}
-                  }
-                >
-                  Cantidad: {product.quantity}
-                </Text>
-              </div>
-              <div>
-                <Text
-                  strong
-                  type={checkedItems.includes(product.id) && "success"}
-                  style={
-                    checkedItems.includes(product.id)
-                      ? { textDecoration: "line-through" }
-                      : {}
-                  }
-                >
-                  Precio: {product.price}
-                </Text>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                  height: "100%",
-                }}
-              >
-                <Checkbox onChange={() => CheckBoxOnChange(product.id)}>
-                  Comprado
-                </Checkbox>
-              </div>
-            </Card>
+            <ProductCard
+              product={product}
+              products={products}
+              updateProducts={updateProducts}
+              checkBoxOnChange={checkBoxOnChange}
+              checkedItems={checkedItems}
+            />
           </List.Item>
         )}
       />

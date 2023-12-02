@@ -1,27 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowRightOutlined,
   ArrowLeftOutlined,
-  EyeOutlined,
   UnorderedListOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, Button, theme } from "antd";
 import { RoutesContent } from "./RoutesContent";
 import { Link } from "react-router-dom";
+import { productList } from "./Product/data";
 
 const { Header, Sider, Content } = Layout;
 
 export const App = () => {
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
+  const [collapsed, setCollapsed] = useState(false);
+  const [products, setProducts] = useState(productList);
+
+  const updateProducts = (newProducts) => {
+    setProducts(newProducts);
+    localStorage.setItem("products", JSON.stringify(newProducts));
+  };
+
   const getStoredProducts = () => {
     const storedProducts = localStorage.getItem("products");
     return storedProducts ? JSON.parse(storedProducts) : [];
   };
 
-  const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  useEffect(() => {
+    const storedProducts = getStoredProducts();
+    if (storedProducts && storedProducts.length > 0) {
+      setProducts(storedProducts);
+      updateProducts(storedProducts);
+    }
+  }, []);
+
   return (
     <Layout style={{ minHeight: "90vh" }}>
       <Sider trigger={null} collapsible collapsed={collapsed}>
@@ -30,10 +45,7 @@ export const App = () => {
             <Link to="/list">Lista de compras</Link>
           </Menu.Item>
           <Menu.Item key="2" icon={<PlusCircleOutlined />}>
-            <Link to="/form">Agregar producto</Link>
-          </Menu.Item>
-          <Menu.Item key="3" icon={<EyeOutlined />}>
-            <Link to="/detail">Ver producto</Link>
+            <Link to="/form">Nuevo producto</Link>
           </Menu.Item>
         </Menu>
       </Sider>
@@ -62,7 +74,7 @@ export const App = () => {
             background: colorBgContainer,
           }}
         >
-          <RoutesContent getStoredProducts={getStoredProducts} />
+          <RoutesContent updateProducts={updateProducts} products={products} />
         </Content>
       </Layout>
     </Layout>
