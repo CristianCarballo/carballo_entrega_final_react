@@ -8,7 +8,7 @@ import {
 import { Layout, Menu, Button, theme } from "antd";
 import { RoutesContent } from "./RoutesContent";
 import { Link } from "react-router-dom";
-import { productList } from "./Product/data";
+import { productList } from "./data";
 
 const { Header, Sider, Content } = Layout;
 
